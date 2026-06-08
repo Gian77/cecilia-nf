@@ -1,16 +1,31 @@
-# User data and generated outputs — never committed
-rawdata/
+#Files and dir NOT tracked
+
+Cecilia-results_*
+code/slurm-*.out
+code/.RData
+code/.Rhistory
+code/functions.sh
+rawdata/test_data/
+rawdata/*.fastq.gz
+rawdata/*.fastq
+rawdata/*.txt
+rawdata/md5.txt
+rawdata/tested_md5.results
+rawdata/raw.counts
+rawdata/bowtie2.list
+rawdata.paired.list
+rawdata/*/
+
 outputs/
+slurms/
+stats/
+scripts/*
+testing/
+code/temp/
+.claude/
 
 # Nextflow runtime artifacts
 work/
 .nextflow/
 .nextflow.log*
 cecilia_nf-*.log
-
-# Testing data
-testing/
-
-# Editor / OS noise
-.DS_Store
-*.swp
