@@ -17,6 +17,7 @@ rawdata.paired.list
 rawdata/*/
 
 outputs/
+outputs_*/
 slurms/
 stats/
 scripts/*
@@ -29,3 +30,4 @@ work/
 .nextflow/
 .nextflow.log*
 cecilia_nf-*.log
+test_*.log

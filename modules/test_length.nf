@@ -16,7 +16,7 @@ process TEST_LENGTH {
     path("*.pdf"),              emit: plots
 
     script:
-    def stripleft_flag = params.stripleft ? "-fastq_stripleft ${params.stripleft_bp}" : ""
+    def stripleft_flag = Utils.asBool(params.stripleft) ? "-fastq_stripleft ${params.stripleft_bp}" : ""
     """
     set -euo pipefail
 

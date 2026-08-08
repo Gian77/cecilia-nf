@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".logo/cecilia_logo_white.png">
+    <img alt="Cecilia-nf logo" src=".logo/cecilia_logo.png" width="400">
+  </picture>
+</p>
+
 # Cecilia-nf
 
 **usearCh basEd ampliCon pIpeLine for Illumina dAta** — Nextflow DSL2 conversion of Cecilia v2.0.
@@ -75,7 +82,7 @@ Steps marked `*` are optional and controlled by flags in `nextflow.config`.
 
 ```
 cecilia-nf/
-├── main.nf                  # Entry point — prints run summary, calls CECILIA workflow
+├── cecilia.nf               # Entry point — prints run summary, calls CECILIA workflow
 ├── nextflow.config          # All user parameters, SLURM resources, Singularity config
 ├── run_cecilia.sb           # SLURM launcher for the Nextflow head process
 ├── workflows/
@@ -191,6 +198,23 @@ sbatch run_cecilia.sb \
 | `fwd_primer` | `GTGCCAGCMGCCGCGGTAA` | 515F (Parada/Caporaso) |
 | `rev_primer` | `GGACTACHVGGGTWTCTAAT` | 806R (Apprill/Caporaso) |
 | `slurm_account` | `glbrc` | SLURM billing account |
+
+---
+
+### Primer pairs
+
+Common primer pairs, carried over from the legacy `Cecilia/config.yaml`, so you don't have to go hunting for sequences. Set `fwd_primer` / `rev_primer` / `rev_primer_rc` on the command line to switch marker/pair.
+
+| Marker | Pair | `fwd_primer` | `rev_primer` | `rev_primer_rc` | Reference |
+|---|---|---|---|---|---|
+| 16S | 515F / 806R | `GTGCCAGCMGCCGCGGTAA` | `GGACTACHVGGGTWTCTAAT` | `ATTAGAWACCCBDGTAGTCC` | Parada et al. 2016, modified by Caporaso; Apprill et al. 2015, modified by Caporaso ([EMP protocol](https://earthmicrobiome.org/protocols-and-standards/16s/)) — **pipeline default** |
+| 16S | 27F / 1492R | `AGAGTTTGATCMTGGCTCAG` | `GGTTACCTTGTTACGACTT` | `AAGTCGTAACAAGGTAACC` | Heuer et al., *Appl Environ Microbiol* 1997;63:3233–41 |
+| 16S | 341F / 806R | `CCTACGGGNGGCWGCAG` (or `CCTACGGGAGGCAGCAG`) | `GGACTACHVGGGTWTCTAAT` | `ATTAGAWACCCBDGTAGTCC` | Albertsen et al., *PLoS ONE* 2015;10:e0132783 |
+| ITS | ITS1F / ITS4 | `CTTGGTCATTTAGAGGAAGTAA` | `TCCTCCGCTTATTGATATGC` | `GCATATCAATAAGCGGAGGA` | Gardes & Bruns 1993; White et al. 1990 |
+| ITS | ITS1F / ITS2 | `CTTGGTCATTTAGAGGAAGTAA` | `GCTGCGTTCTTCATCGATGC` | `GCATCGATGAAGAACGCAGC` | Gardes & Bruns 1993; White et al. 1990 |
+| ITS | 5.8S-Fun / ITS4-Fun | `AACTTTYRRCAAYGGATCWCT` | `AGCCTCCGCTTATTGATATGCTTAART` | `AYTTAAGCATATCAATAAGCGGAGGCT` | Taylor et al., *Appl Environ Microbiol* 2016 |
+| ITS | ITS5-1737F / ITS2-2043R | `GGAAGTAAAAGTCGTAACAAGG` | `GCTGCGTTCTTCATCGATGC` | `GCATCGATGAAGAACGCAGC` | Novogene ITS primer set |
+| AMF (18S) | AMF fwd/rev | `TATYGYTCTTNAACGAGGAATC` | `AACACTCGCAYAYATGYTAGA` | `TCTARCATRTRTGCGAGTGTT` | *(source/citation not recorded in legacy config)* |
 
 ---
 

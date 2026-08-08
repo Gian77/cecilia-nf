@@ -26,11 +26,28 @@ include { TEST_LENGTH_WF    } from './test_length'
 workflow CECILIA {
 
     // -------------------------------------------------------------------------
+    // Boolean params arrive as Strings when overridden on the CLI (e.g.
+    // `--paired false`) — coerce once here and use these locals everywhere
+    // below instead of the raw params.* to avoid Groovy string-truthiness bugs.
+    // -------------------------------------------------------------------------
+    def paired             = Utils.asBool(params.paired)
+    def assemble           = Utils.asBool(params.assemble)
+    def rename              = Utils.asBool(params.rename)
+    def stripleft            = Utils.asBool(params.stripleft)
+    def test_length          = Utils.asBool(params.test_length)
+    def cluster_otu           = Utils.asBool(params.cluster_otu)
+    def cluster_asv           = Utils.asBool(params.cluster_asv)
+    def cluster_asv_to_otu    = Utils.asBool(params.cluster_asv_to_otu)
+    def closed_ref_otu        = Utils.asBool(params.closed_ref_otu)
+    def cluster_swarm         = Utils.asBool(params.cluster_swarm)
+    def sintax_taxonomy       = Utils.asBool(params.sintax_taxonomy)
+
+    // -------------------------------------------------------------------------
     // INPUT CHANNEL
     // Paired-end: fromFilePairs matches *_R1_* / *_R2_* or *_1.fastq / *_2.fastq
     // Single-end: fromPath with a per-sample tuple
     // -------------------------------------------------------------------------
-    if (params.paired) {
+    if (paired) {
         ch_raw = Channel
             .fromFilePairs("${params.rawdata}/*_{R1,R2}*.fastq{,.gz,.bz2}", checkIfExists: true)
     } else {
@@ -50,12 +67,12 @@ workflow CECILIA {
     // each receiving all samples for that direction pooled together.
     // groupTuple() collects all per-sample files sharing the same group key.
     // -------------------------------------------------------------------------
-    if (params.paired) {
-        ch_fqc_r1 = DECOMPRESS.out.reads.map { id, reads -> tuple('R1', reads[0]) }.groupTuple()
-        ch_fqc_r2 = DECOMPRESS.out.reads.map { id, reads -> tuple('R2', reads[1]) }.groupTuple()
+    if (paired) {
+        ch_fqc_r1 = DECOMPRESS.out.reads.map { id, reads -> tuple('R1', Utils.asList(reads)[0]) }.groupTuple()
+        ch_fqc_r2 = DECOMPRESS.out.reads.map { id, reads -> tuple('R2', Utils.asList(reads)[1]) }.groupTuple()
         FASTQC(ch_fqc_r1.mix(ch_fqc_r2))
     } else {
-        FASTQC(DECOMPRESS.out.reads.map { id, reads -> tuple('all', reads[0]) }.groupTuple())
+        FASTQC(DECOMPRESS.out.reads.map { id, reads -> tuple('all', Utils.asList(reads)[0]) }.groupTuple())
     }
 
     // -------------------------------------------------------------------------
@@ -69,7 +86,7 @@ workflow CECILIA {
     // -------------------------------------------------------------------------
     // STEP 04  —  Paired-read assembly  (optional, per sample)
     // -------------------------------------------------------------------------
-    if (params.assemble) {
+    if (assemble) {
         ASSEMBLE_READS(REMOVE_PHIX.out.reads)
         ASSEMBLE_READS.out.counts
             .collectFile(name: 'all.assembled.counts', storeDir: "${params.outdir}/stats", newLine: false)
@@ -84,7 +101,7 @@ workflow CECILIA {
     // sequential numbering (sample001, sample002, ...) is assigned correctly.
     // Outputs are re-parallelised with flatten().map() for downstream steps.
     // -------------------------------------------------------------------------
-    if (params.rename) {
+    if (rename) {
         RENAME_READS(ch_after_assemble.map { id, f -> f }.collect())
         ch_after_rename = RENAME_READS.out.reads
             .flatten()
@@ -113,12 +130,12 @@ workflow CECILIA {
     // Downstream source for filtering: trimmed.fastq if stripleft, else pooled.fastq
     // EE_STATS.out.trimmed is optional; using ch_pooled when stripleft=false avoids
     // an empty-channel problem downstream.
-    ch_source = params.stripleft ? EE_STATS.out.trimmed : ch_pooled
+    ch_source = stripleft ? EE_STATS.out.trimmed : ch_pooled
 
     // -------------------------------------------------------------------------
     // STEP 08  —  Test read length  (optional subworkflow)
     // -------------------------------------------------------------------------
-    if (params.test_length) {
+    if (test_length) {
         TEST_LENGTH_WF(ch_source)
     }
 
@@ -150,16 +167,16 @@ workflow CECILIA {
     // -------------------------------------------------------------------------
     ch_cluster_fastas = Channel.empty()
 
-    if (params.cluster_otu) {
+    if (cluster_otu) {
         CLUSTER_UPARSE(ch_uniques_pool)
         ch_cluster_fastas = ch_cluster_fastas.mix(CLUSTER_UPARSE.out.fasta)
     }
 
-    if (params.cluster_asv) {
+    if (cluster_asv) {
         CLUSTER_UNOISE(ch_uniques_pool)
         ch_cluster_fastas = ch_cluster_fastas.mix(CLUSTER_UNOISE.out.asv)
 
-        if (params.cluster_asv_to_otu) {
+        if (cluster_asv_to_otu) {
             CLUSTER_ASV_TO_OTU(
                 CLUSTER_UNOISE.out.asv
                     .map { len, fasta -> tuple(len, fasta) }
@@ -168,11 +185,11 @@ workflow CECILIA {
         }
     }
 
-    if (params.closed_ref_otu) {
+    if (closed_ref_otu) {
         CLOSED_REF_OTU(DEREPLICATE.out.uniques)
     }
 
-    if (params.cluster_swarm) {
+    if (cluster_swarm) {
         ch_linear_pool = DEREPLICATE.out.linear.combine(ch_pooled)
         CLUSTER_SWARM(ch_linear_pool)
         ch_cluster_fastas = ch_cluster_fastas.mix(CLUSTER_SWARM.out.fasta)
@@ -183,7 +200,7 @@ workflow CECILIA {
     // BUILD_SINTAX_DB runs once; TAXONOMY_SINTAX fans out over all cluster
     // FASTAs via .combine() — one SLURM job per FASTA, all parallel.
     // -------------------------------------------------------------------------
-    if (params.sintax_taxonomy) {
+    if (sintax_taxonomy) {
         BUILD_SINTAX_DB(file(params.sintax_db))
         TAXONOMY_SINTAX(
             ch_cluster_fastas.combine(BUILD_SINTAX_DB.out.udb)
@@ -204,10 +221,10 @@ workflow CECILIA {
         .mix(POOL_READS.out.subset_fasta)
         .mix(EE_STATS.out.eestats)
 
-    if (params.rename) {
+    if (rename) {
         ch_misc = ch_misc.mix(RENAME_READS.out.mapping)
     }
-    if (params.test_length) {
+    if (test_length) {
         ch_misc = ch_misc
             .mix(TEST_LENGTH_WF.out.results)
             .mix(TEST_LENGTH_WF.out.plots)
@@ -218,31 +235,31 @@ workflow CECILIA {
     ch_cluster = Channel.empty()
         .mix(DEREPLICATE.out.uniques.map { len, f -> f })
 
-    if (params.cluster_otu) {
+    if (cluster_otu) {
         ch_cluster = ch_cluster
             .mix(CLUSTER_UPARSE.out.fasta.map { len, f -> f })
             .mix(CLUSTER_UPARSE.out.table)
     }
-    if (params.cluster_asv) {
+    if (cluster_asv) {
         ch_cluster = ch_cluster
             .mix(CLUSTER_UNOISE.out.asv.map { len, f -> f })
             .mix(CLUSTER_UNOISE.out.table)
     }
-    if (params.cluster_asv_to_otu) {
+    if (cluster_asv_to_otu) {
         ch_cluster = ch_cluster
             .mix(CLUSTER_ASV_TO_OTU.out.fasta.map { len, f -> f })
             .mix(CLUSTER_ASV_TO_OTU.out.table)
     }
-    if (params.closed_ref_otu) {
+    if (closed_ref_otu) {
         ch_cluster = ch_cluster
             .mix(CLOSED_REF_OTU.out.table.map { len, f -> f })
     }
-    if (params.cluster_swarm) {
+    if (cluster_swarm) {
         ch_cluster = ch_cluster
             .mix(CLUSTER_SWARM.out.fasta.map { len, f -> f })
             .mix(CLUSTER_SWARM.out.table)
     }
-    if (params.sintax_taxonomy) {
+    if (sintax_taxonomy) {
         ch_cluster = ch_cluster
             .mix(TAXONOMY_SINTAX.out.sintax.map { len, f -> f })
     }

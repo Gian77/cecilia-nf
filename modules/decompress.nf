@@ -24,7 +24,12 @@ process DECOMPRESS {
         elif [[ "\$f" == *.fastq.gz ]]; then
             gzip -cd  "\$f" > "\${base%.gz}"
         elif [[ "\$f" == *.fastq ]]; then
-            cp "\$f" "\$base"
+            # Nextflow's output glob excludes any file whose NAME matches a
+            # staged input, even if the file content differs (e.g. after
+            # cp) — the exclusion is name-based, not identity-based. Give
+            # the passthrough copy a distinct name so it is recognised as
+            # a genuine output.
+            cp "\$f" "\${base%.fastq}_dc.fastq"
         else
             echo "WARNING: \$f has unrecognised format — skipping" >&2
         fi

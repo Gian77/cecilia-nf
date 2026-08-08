@@ -17,7 +17,7 @@ process COLLECT_RESULTS {
     path("Cecilia-results_*.tar.gz"), emit: archive
 
     script:
-    def suffix = params.assemble ? 'assembled' : (params.paired ? 'paired' : 'single')
+    def suffix = Utils.asBool(params.assemble) ? 'assembled' : (Utils.asBool(params.paired) ? 'paired' : 'single')
     """
     set -euo pipefail
 

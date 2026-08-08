@@ -19,8 +19,8 @@ process STRIP_PRIMERS {
 
     script:
     def out = "${sample_id}_stripped.fastq"
-    if (params.primers) {
-        def adapter_flags = params.assemble
+    if (Utils.asBool(params.primers)) {
+        def adapter_flags = Utils.asBool(params.assemble)
             ? "-g ${params.fwd_primer} -a ${params.rev_primer_rc} -n 2"
             : "-g ${params.fwd_primer}"
         """

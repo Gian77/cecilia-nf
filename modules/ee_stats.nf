@@ -21,7 +21,7 @@ process EE_STATS {
     path("*.counts"),                           emit: counts,   optional: true
 
     script:
-    if (params.stripleft) {
+    if (Utils.asBool(params.stripleft)) {
         """
         set -euo pipefail
 

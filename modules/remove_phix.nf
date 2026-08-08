@@ -18,8 +18,9 @@ process REMOVE_PHIX {
     path("*.counts"),                            emit: counts
 
     script:
-    def r1   = reads[0]
-    def r2   = reads.size() > 1 ? reads[1] : null
+    def rlist = Utils.asList(reads)
+    def r1   = rlist[0]
+    def r2   = rlist.size() > 1 ? rlist[1] : null
     def paired_cmd = r2
         ? """
           ${params.usearch} \\

@@ -16,7 +16,7 @@ process DEREPLICATE {
     tuple val(len), path("uniques_${len}bp_linear.fasta"), emit: linear, optional: true
 
     script:
-    def swarm_prep = params.cluster_swarm ? """
+    def swarm_prep = Utils.asBool(params.cluster_swarm) ? """
         # Linearise FASTA for SWARM (awk one-liner from original pipeline)
         awk '/^>/ {printf("%s%s\\t",(N>0?"\\n":""),\$0); N++; next} \\
              {printf("%s",\$0)} END {printf("\\n")}' \\

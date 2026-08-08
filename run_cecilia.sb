@@ -26,4 +26,4 @@ module load Miniforge3
 conda activate nextflow
 
 # Pass any extra arguments (e.g. -resume <session_id>) through $@
-nextflow run main.nf "$@"
+nextflow run cecilia.nf "$@"

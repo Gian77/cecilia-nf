@@ -2,7 +2,7 @@
 nextflow.enable.dsl = 2
 
 // =============================================================================
-// Cecilia-nf  —  main.nf
+// Cecilia-nf  —  cecilia.nf
 // usearCh basEd ampliCon pIpeLine for Illumina dAta
 // Gian M.N. Benucci, Ph.D.  |  benucci@msu.edu
 // =============================================================================
@@ -11,7 +11,7 @@ include { CECILIA } from './workflows/cecilia'
 
 workflow {
 
-    if (params.help) {
+    if (Utils.asBool(params.help)) {
         log.info """
     ╔═══════════════════════════════════════════╗
     ║            C E C I L I A  v2.0            ║
@@ -19,7 +19,7 @@ workflow {
     ╚═══════════════════════════════════════════╝
 
     Usage:
-        nextflow run main.nf [options]
+        nextflow run cecilia.nf [options]
         sbatch run_cecilia.sb [options]
 
     ── Input / Output ───────────────────────────────────────────────────────────
