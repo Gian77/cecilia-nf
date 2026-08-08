@@ -1,8 +1,5 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset=".logo/cecilia_logo_white.png">
-    <img alt="Cecilia-nf logo" src=".logo/cecilia_logo.png" width="400">
-  </picture>
+  <img alt="Cecilia-nf logo" src=".logo/cecilia_logo.png" width="100%">
 </p>
 
 # Cecilia-nf
