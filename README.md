@@ -211,7 +211,23 @@ Common primer pairs, carried over from the legacy `Cecilia/config.yaml`, so you 
 | ITS | ITS1F / ITS2 | `CTTGGTCATTTAGAGGAAGTAA` | `GCTGCGTTCTTCATCGATGC` | `GCATCGATGAAGAACGCAGC` | Gardes & Bruns 1993; White et al. 1990 |
 | ITS | 5.8S-Fun / ITS4-Fun | `AACTTTYRRCAAYGGATCWCT` | `AGCCTCCGCTTATTGATATGCTTAART` | `AYTTAAGCATATCAATAAGCGGAGGCT` | Taylor et al., *Appl Environ Microbiol* 2016 |
 | ITS | ITS5-1737F / ITS2-2043R | `GGAAGTAAAAGTCGTAACAAGG` | `GCTGCGTTCTTCATCGATGC` | `GCATCGATGAAGAACGCAGC` | Novogene ITS primer set |
-| AMF (18S) | AMF fwd/rev | `TATYGYTCTTNAACGAGGAATC` | `AACACTCGCAYAYATGYTAGA` | `TCTARCATRTRTGCGAGTGTT` | *(source/citation not recorded in legacy config)* |
+| AMF (18S) | SSUmCf / LSUmBr | `TATYGYTCTTNAACGAGGAATC` | `AACACTCGCAYAYATGYTAGA` | `TCTARCATRTRTGCGAGTGTT` | Krüger et al. 2009 |
+
+---
+
+## References
+
+Full citations for the primer pairs in the table above:
+
+- Parada, A.E., Needham, D.M. & Fuhrman, J.A. (2016). Every base matters: assessing small subunit rRNA primers for marine microbiomes with mock communities, time series and global field samples. *Environmental Microbiology*, 18(5), 1403–1414. https://doi.org/10.1111/1462-2920.13023
+- Apprill, A., McNally, S., Parsons, R. & Weber, L. (2015). Minor revision to V4 region SSU rRNA 806R gene primer greatly increases detection of SAR11 bacterioplankton. *Aquatic Microbial Ecology*, 75, 129–137. https://doi.org/10.3354/ame01753
+- Heuer, H., Krsek, M., Baker, P., Smalla, K. & Wellington, E.M.H. (1997). Analysis of actinomycete communities by specific amplification of genes encoding 16S rRNA and gel-electrophoretic separation in denaturing gradients. *Applied and Environmental Microbiology*, 63(8), 3233–3241.
+- Albertsen, M., Karst, S.M., Ziegler, A.S., Kirkegaard, R.H. & Nielsen, P.H. (2015). Back to basics – the influence of DNA extraction and primer choice on phylogenetic analysis of activated sludge communities. *PLoS ONE*, 10(7), e0132783. https://doi.org/10.1371/journal.pone.0132783
+- Gardes, M. & Bruns, T.D. (1993). ITS primers with enhanced specificity for basidiomycetes—application to the identification of mycorrhizae and rusts. *Molecular Ecology*, 2(2), 113–118. https://doi.org/10.1111/j.1365-294X.1993.tb00005.x
+- White, T.J., Bruns, T., Lee, S. & Taylor, J. (1990). Amplification and direct sequencing of fungal ribosomal RNA genes for phylogenetics. In Innis, M.A., Gelfand, D.H., Sninsky, J.J. & White, T.J. (Eds.), *PCR Protocols: A Guide to Methods and Applications* (pp. 315–322). Academic Press.
+- Taylor, D.L., Walters, W.A., Lennon, N.J., Bochicchio, J., Krohn, A., Caporaso, J.G. & Pennanen, T. (2016). Accurate estimation of fungal diversity and abundance through improved lineage-specific primers optimized for Illumina amplicon sequencing. *Applied and Environmental Microbiology*, 82(24), 7217–7226. https://doi.org/10.1128/AEM.02576-16
+- Krüger, M., Stockinger, H., Krüger, C. & Schüßler, A. (2009). DNA-based species level detection of Glomeromycota: one PCR primer set for all arbuscular mycorrhizal fungi. *New Phytologist*, 183(1), 212–223. https://doi.org/10.1111/j.1469-8137.2009.02835.x
+- ITS5-1737F / ITS2-2043R: proprietary Novogene ITS primer set, no peer-reviewed citation available.
 
 ---
 
