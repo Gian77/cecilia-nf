@@ -2,9 +2,10 @@
   <img alt="Cecilia-nf logo" src=".logo/cecilia_logo.png" width="100%">
 </p>
 
-# Cecilia-nf
 
-**usearCh basEd ampliCon pIpeLine for Illumina dAta** — Nextflow DSL2 conversion of Cecilia v2.0.
+**CECILIA - usearCh basEd ampliCon pIpeLine for Illumina dAta**
+
+A Nextflow DSL2 reimplementation of Cecilia v2.0.
 
 > Gian M.N. Benucci, Ph.D. | benucci@msu.edu | Michigan State University
 
@@ -12,7 +13,7 @@
 
 ## Overview
 
-Cecilia-nf processes paired-end (or single-end) Illumina amplicon reads through quality control, assembly, clustering, and taxonomy. All steps run as SLURM jobs via the Nextflow executor with Singularity containers, providing per-sample parallelism and full reproducibility.
+CECILIA processes paired-end (or single-end) Illumina amplicon reads through quality control, assembly, clustering, and taxonomy. All steps run as SLURM jobs via the Nextflow executor with Singularity containers, providing per-sample parallelism and full reproducibility.
 
 The pipeline replaces the 18 sequential SLURM bash scripts in `code/` with a single DAG-driven workflow. The original `config.yaml` is replaced by `nextflow.config`.
 
@@ -78,7 +79,7 @@ Steps marked `*` are optional and controlled by flags in `nextflow.config`.
 ## Repository structure
 
 ```
-cecilia-nf/
+CECILIAv2/
 ├── cecilia.nf               # Entry point — prints run summary, calls CECILIA workflow
 ├── nextflow.config          # All user parameters, SLURM resources, Singularity config
 ├── run_cecilia.sb           # SLURM launcher for the Nextflow head process
@@ -138,10 +139,10 @@ All other tools (FastQC, Cutadapt, seqtk, SWARM, R/tidyverse) are pulled automat
 #    params.closedRef_db — path to closed-reference FASTA (if used)
 
 # 3. Submit to SLURM from a development node
-sbatch cecilia-nf/run_cecilia.sb
+sbatch CECILIAv2/run_cecilia.sb
 
 # 4. Resume a previous run after a failure
-sbatch cecilia-nf/run_cecilia.sb -resume <session-id>
+sbatch CECILIAv2/run_cecilia.sb -resume <session-id>
 ```
 
 The session ID is shown in the Nextflow run log and in `.nextflow/history`.
