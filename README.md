@@ -2,9 +2,6 @@
   <img alt="Cecilia-nf logo" src=".logo/cecilia_logo.png" width="100%">
 </p>
 
-
-**CECILIA - usearCh basEd ampliCon pIpeLine for Illumina dAta**
-
 A Nextflow DSL2 reimplementation of Cecilia v2.0.
 
 > Gian M.N. Benucci, Ph.D. | benucci@msu.edu | Michigan State University
