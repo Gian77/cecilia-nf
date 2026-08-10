@@ -245,7 +245,7 @@ workflow CECILIA {
             .mix(CLUSTER_UNOISE.out.asv.map { len, f -> f })
             .mix(CLUSTER_UNOISE.out.table)
     }
-    if (cluster_asv_to_otu) {
+    if (cluster_asv && cluster_asv_to_otu) {
         ch_cluster = ch_cluster
             .mix(CLUSTER_ASV_TO_OTU.out.fasta.map { len, f -> f })
             .mix(CLUSTER_ASV_TO_OTU.out.table)
