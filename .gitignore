@@ -24,6 +24,7 @@ scripts/*
 testing/
 code/temp/
 .claude/
+CLAUDE.md
 
 # Nextflow runtime artifacts
 work/
